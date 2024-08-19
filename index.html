@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Todoist Web App</title>
+  <title>Advanced Todoist Web App</title>
   <style>
     /* Add your CSS styles here */
     body {
@@ -69,6 +69,42 @@
       border-radius: 4px;
       cursor: pointer;
     }
+    .task-list li .task-details {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+    }
+    .task-list li .task-details input[type="text"] {
+      flex-grow: 1;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .task-list li .task-details select {
+      margin-left: 10px;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .add-task {
+      display: flex;
+      margin-top: 20px;
+    }
+    .add-task input[type="text"] {
+      flex-grow: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .add-task button {
+      margin-left: 10px;
+      padding: 10px 20px;
+      background-color: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -82,41 +118,112 @@
     </div>
     <ul class="task-list">
       <li>
-        <span>Images for newsletter</span>
-        <button class="complete-task">Complete</button>
+        <div class="task-details">
+          <input type="text" value="Images for newsletter">
+          <select>
+            <option value="personal">Personal</option>
+            <option value="work">Work</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="task-actions">
+          <button class="complete-task">Complete</button>
+          <button class="edit-task">Edit</button>
+          <button class="delete-task">Delete</button>
+        </div>
       </li>
       <li class="completed">
-        <span>May 15 newletter</span>
-        <button class="complete-task">Undo</button>
+        <div class="task-details">
+          <input type="text" value="May 15 newsletter">
+          <select>
+            <option value="personal">Personal</option>
+            <option value="work">Work</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="task-actions">
+          <button class="complete-task">Undo</button>
+          <button class="edit-task">Edit</button>
+          <button class="delete-task">Delete</button>
+        </div>
       </li>
       <li>
-        <span>Banner image design</span>
-        <button class="complete-task">Complete</button>
-      </li>
-      <li>
-        <span>Thumbnail for product</span>
-        <button class="complete-task">Complete</button>
-      </li>
-      <li>
-        <span>Thumbnail for product</span>
-        <button class="complete-task">Complete</button>
-      </li>
-      <li>
-        <span>Resize team photo</span>
-        <button class="complete-task">Complete</button>
+        <div class="task-details">
+          <input type="text" value="Banner image design">
+          <select>
+            <option value="personal">Personal</option>
+            <option value="work">Work</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="task-actions">
+          <button class="complete-task">Complete</button>
+          <button class="edit-task">Edit</button>
+          <button class="delete-task">Delete</button>
+        </div>
       </li>
     </ul>
+    <div class="add-task">
+      <input type="text" placeholder="Add a new task" id="new-task-input">
+      <select id="new-task-category">
+        <option value="personal">Personal</option>
+        <option value="work">Work</option>
+        <option value="other">Other</option>
+      </select>
+      <button id="add-task-btn">Add Task</button>
+    </div>
   </div>
 
   <script>
     // Add your JavaScript code here
     const taskList = document.querySelector('.task-list');
+    const newTaskInput = document.getElementById('new-task-input');
+    const newTaskCategorySelect = document.getElementById('new-task-category');
+    const addTaskBtn = document.getElementById('add-task-btn');
+
+    // Add a new task
+    addTaskBtn.addEventListener('click', () => {
+      const newTaskText = newTaskInput.value.trim();
+      const newTaskCategory = newTaskCategorySelect.value;
+      if (newTaskText) {
+        const newTaskItem = document.createElement('li');
+        newTaskItem.innerHTML = `
+          <div class="task-details">
+            <input type="text" value="${newTaskText}">
+            <select>
+              <option value="personal" ${newTaskCategory === 'personal' ? 'selected' : ''}>Personal</option>
+              <option value="work" ${newTaskCategory === 'work' ? 'selected' : ''}>Work</option>
+              <option value="other" ${newTaskCategory === 'other' ? 'selected' : ''}>Other</option>
+            </select>
+          </div>
+          <div class="task-actions">
+            <button class="complete-task">Complete</button>
+            <button class="edit-task">Edit</button>
+            <button class="delete-task">Delete</button>
+          </div>
+        `;
+        taskList.appendChild(newTaskItem);
+        newTaskInput.value = '';
+        newTaskCategorySelect.value = 'personal';
+      }
+    });
+
+    // Complete/Undo a task
     taskList.addEventListener('click', (event) => {
       if (event.target.classList.contains('complete-task')) {
         const taskItem = event.target.closest('li');
         taskItem.classList.toggle('completed');
-        const taskText = taskItem.querySelector('span').textContent;
         event.target.textContent = taskItem.classList.contains('completed') ? 'Undo' : 'Complete';
+      } else if (event.target.classList.contains('edit-task')) {
+        const taskItem = event.target.closest('li');
+        const taskInput = taskItem.querySelector('input[type="text"]');
+        const taskSelect = taskItem.querySelector('select');
+        taskInput.readOnly = !taskInput.readOnly;
+        taskSelect.disabled = !taskSelect.disabled;
+        event.target.textContent = taskInput.readOnly ? 'Edit' : 'Save';
+      } else if (event.target.classList.contains('delete-task')) {
+        const taskItem = event.target.closest('li');
+        taskList.removeChild(taskItem);
       }
     });
   </script>
