@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todoist Web App</title>
+  <style>
+    /* Add your CSS styles here */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f8f8;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #ccc;
+    }
+    .header h1 {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .header .user-info {
+      display: flex;
+      align-items: center;
+    }
+    .header .user-info span {
+      margin-right: 10px;
+    }
+    .header .user-info button {
+      padding: 5px 10px;
+      background-color: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .task-list {
+      list-style-type: none;
+      padding: 0;
+    }
+    .task-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 10px;
+    }
+    .task-list li.completed {
+      text-decoration: line-through;
+      color: #aaa;
+    }
+    .task-list li button {
+      padding: 5px 10px;
+      background-color: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Todoist</h1>
+      <div class="user-info">
+        <span>10786</span>
+        <button>+ New</button>
+      </div>
+    </div>
+    <ul class="task-list">
+      <li>
+        <span>Images for newsletter</span>
+        <button class="complete-task">Complete</button>
+      </li>
+      <li class="completed">
+        <span>May 15 newletter</span>
+        <button class="complete-task">Undo</button>
+      </li>
+      <li>
+        <span>Banner image design</span>
+        <button class="complete-task">Complete</button>
+      </li>
+      <li>
+        <span>Thumbnail for product</span>
+        <button class="complete-task">Complete</button>
+      </li>
+      <li>
+        <span>Thumbnail for product</span>
+        <button class="complete-task">Complete</button>
+      </li>
+      <li>
+        <span>Resize team photo</span>
+        <button class="complete-task">Complete</button>
+      </li>
+    </ul>
+  </div>
+
+  <script>
+    // Add your JavaScript code here
+    const taskList = document.querySelector('.task-list');
+    taskList.addEventListener('click', (event) => {
+      if (event.target.classList.contains('complete-task')) {
+        const taskItem = event.target.closest('li');
+        taskItem.classList.toggle('completed');
+        const taskText = taskItem.querySelector('span').textContent;
+        event.target.textContent = taskItem.classList.contains('completed') ? 'Undo' : 'Complete';
+      }
+    });
+  </script>
+</body>
+</html>
